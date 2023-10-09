@@ -2,6 +2,14 @@ $dummyEnabledColor: white;
 $dummyDisabledColor: rgba(255, 255, 255, 0.2);
 $dummyTransitionTime: 1s;
 
+.btn-visible {
+  width: 100px;
+  height: 50px;
+  color: black;
+  margin-block: auto;
+  margin-right: -60px;
+}
+
 .dummy {
   margin-left: 4rem;
   position: relative;
