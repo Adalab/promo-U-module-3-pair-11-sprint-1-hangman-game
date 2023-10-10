@@ -6,20 +6,29 @@ function App() {
   let [numberOfErrors, setNumberOfErrors] = useState(0);
   const [lastLetter, setLastLetter] = useState("");
 
-  const validLetters = 'abcdefghijklmnopqrstuvwxyzáéíóúüABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚÜ'
-
   const handleClick = () => {
     setNumberOfErrors(++numberOfErrors);
     console.log(numberOfErrors);
-  };
+  }
 
   const handleInput = (ev) => {
     console.log(ev.target.value);
     const letterValue = ev.target.value
+    const regex = /[a-zA-ZáéíóúüÁÉÍÓÚÜ]/;
 
-    if(validLetters.includes(letterValue)){
+    if(letterValue === "" || regex.test(letterValue)){
       setLastLetter(letterValue);
     }
+
+    /* OTRA OPCIÓN
+      // const validLetters = 'abcdefghijklmnopqrstuvwxyzáéíóúüABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚÜ'
+
+      if(validLetters.includes(letterValue)){
+        setLastLetter(letterValue);
+      } 
+    */
+
+    
   }
 
   const handleSubmit = (ev) => {
