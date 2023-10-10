@@ -4,10 +4,27 @@ import '../styles/App.scss';
 
 function App() {
   let [numberOfErrors, setNumberOfErrors] = useState(0);
+  const [lastLetter, setLastLetter] = useState("");
+
+  const validLetters = 'abcdefghijklmnopqrstuvwxyzáéíóúüABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚÜ'
+
   const handleClick = () => {
     setNumberOfErrors(++numberOfErrors);
     console.log(numberOfErrors);
   };
+
+  const handleInput = (ev) => {
+    console.log(ev.target.value);
+    const letterValue = ev.target.value
+
+    if(validLetters.includes(letterValue)){
+      setLastLetter(letterValue);
+    }
+  }
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+  }
 
   return (
     <>
@@ -42,7 +59,7 @@ function App() {
                 <li className="letter">x</li>
               </ul>
             </div>
-            <form className="form">
+            <form className="form" onSubmit={handleSubmit}>
               <label className="title" htmlFor="last-letter">
                 Escribe una letra:
               </label>
@@ -53,6 +70,8 @@ function App() {
                 type="text"
                 name="last-letter"
                 id="last-letter"
+                onChange={handleInput}
+                value={lastLetter}
               />
             </form>
           </section>
