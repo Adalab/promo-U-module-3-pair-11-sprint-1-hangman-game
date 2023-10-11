@@ -4,22 +4,38 @@ import '../styles/App.scss';
 
 function App() {
   let [numberOfErrors, setNumberOfErrors] = useState(0);
-  const [lastLetter, setLastLetter] = useState("");
+  const [word, setWord] = useState('pepino');
+  const [lastLetter, setLastLetter] = useState('');
+  const [userLetters, setuserLetters] = useState([]);
+
+  const renderSolutionLetters = () => {
+    const wordLetters = word.split('');
+    console.log(wordLetters);
+    return wordLetters
+      .filter((letter) =>
+        letter.toLowerCase().includes(lastLetter.toLowerCase())
+      )
+      .map((letter, index) => {
+        return <li key={index} className="letter"></li>;
+      });
+  };
 
   const handleClick = () => {
     setNumberOfErrors(++numberOfErrors);
     console.log(numberOfErrors);
-  }
+  };
 
   const handleInput = (ev) => {
     console.log(ev.target.value);
-    const letterValue = ev.target.value
-    const regex = /[a-zA-ZáéíóúüÁÉÍÓÚÜ]/;
+    const letterValue = ev.target.value;
+    const regex = /[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]/;
 
-    if(letterValue === "" || regex.test(letterValue)){
+    if (letterValue === '' || regex.test(letterValue)) {
       setLastLetter(letterValue);
     }
-
+    if (letterValue !== '' && regex.test(letterValue)) {
+      setuserLetters([letterValue, ...userLetters]);
+    }
     /* OTRA OPCIÓN
       // const validLetters = 'abcdefghijklmnopqrstuvwxyzáéíóúüABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚÜ'
 
@@ -27,13 +43,11 @@ function App() {
         setLastLetter(letterValue);
       } 
     */
-
-    
-  }
+  };
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
-  }
+  };
 
   return (
     <>
@@ -44,9 +58,11 @@ function App() {
         <main className="main">
           <section>
             <div className="solution">
-              <h2 className="title">Solución:</h2>
+              <h2 className="title">Solución: </h2>
+
               <ul className="letters">
-                <li className="letter">k</li>
+                {renderSolutionLetters()}
+                {/*      <li className="letter">k</li>
                 <li className="letter">a</li>
                 <li className="letter"></li>
                 <li className="letter">a</li>
@@ -55,7 +71,7 @@ function App() {
                 <li className="letter"></li>
                 <li className="letter">k</li>
                 <li className="letter">e</li>
-                <li className="letter">r</li>
+                <li className="letter">r</li> */}
               </ul>
             </div>
             <div className="error">
