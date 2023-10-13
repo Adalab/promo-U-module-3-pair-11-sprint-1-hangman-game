@@ -22,12 +22,14 @@ function App() {
   };
 
   const renderErrorLetters = () => {
-    const wordLetters = word.split('');
-    const noExist = [...userLetters]
+    const noExist = userLetters.filter((letter)=> word.includes(letter) == false)
     
-    // return noExist.filter((letter) => letter != word)
-
-    
+    return noExist
+    .map((letter, index) => {
+      return <li key={index} className="letter">
+        {letter}
+      </li>;
+    });
   }
 
   const handleClick = () => {
