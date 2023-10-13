@@ -22,7 +22,7 @@ function App() {
   };
 
   const renderErrorLetters = () => {
-    const noExist = userLetters.filter((letter)=> word.includes(letter) == false)
+    const noExist = userLetters.filter((letter)=> word.includes(letter) === false)
     
     return noExist
     .map((letter, index) => {
