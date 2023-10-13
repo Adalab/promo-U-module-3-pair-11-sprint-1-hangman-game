@@ -4,21 +4,31 @@ import '../styles/App.scss';
 
 function App() {
   let [numberOfErrors, setNumberOfErrors] = useState(0);
-  const [word, setWord] = useState('pepino');
+  const [word, setWord] = useState('katakroker');
   const [lastLetter, setLastLetter] = useState('');
   const [userLetters, setuserLetters] = useState([]);
 
   const renderSolutionLetters = () => {
     const wordLetters = word.split('');
     console.log(wordLetters);
-    return wordLetters
-      .filter((letter) =>
-        letter.toLowerCase().includes(lastLetter.toLowerCase())
-      )
+
+     return wordLetters   // todas las letras buscadas por el user
       .map((letter, index) => {
-        return <li key={index} className="letter"></li>;
+        const exist = userLetters.includes(letter.toLowerCase())
+        return <li key={index} className="letter">
+          {exist ? letter : ""}
+        </li>;
       });
   };
+
+  const renderErrorLetters = () => {
+    const wordLetters = word.split('');
+    const noExist = [...userLetters]
+    
+    // return noExist.filter((letter) => letter != word)
+
+    
+  }
 
   const handleClick = () => {
     setNumberOfErrors(++numberOfErrors);
@@ -27,7 +37,7 @@ function App() {
 
   const handleInput = (ev) => {
     console.log(ev.target.value);
-    const letterValue = ev.target.value;
+    const letterValue = ev.target.value.toLowerCase();
     const regex = /[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ]/;
 
     if (letterValue === '' || regex.test(letterValue)) {
@@ -77,11 +87,12 @@ function App() {
             <div className="error">
               <h2 className="title">Letras falladas:</h2>
               <ul className="letters">
-                <li className="letter">f</li>
+              {renderErrorLetters()}
+                {/* <li className="letter">f</li>
                 <li className="letter">q</li>
                 <li className="letter">h</li>
                 <li className="letter">p</li>
-                <li className="letter">x</li>
+                <li className="letter">x</li> */}
               </ul>
             </div>
             <form className="form" onSubmit={handleSubmit}>
