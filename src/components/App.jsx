@@ -1,41 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import viteLogo from '/vite.svg'
+import callToApi from '../services/api'; // Importamos el servicio que acabamos de crear
 import '../styles/App.scss';
 
 function App() {
   let [numberOfErrors, setNumberOfErrors] = useState(0);
-  const [word, setWord] = useState('katakroker');
+  const [word, setWord] = useState('');
   const [lastLetter, setLastLetter] = useState('');
   const [userLetters, setuserLetters] = useState([]);
+
+  useEffect(() => {
+    // Dentro de useEffect llamamos a la API
+    callToApi().then((response) => {
+      // Cuando la API responde guardamos los datos en el estado para que se vuelva a renderizar el componente
+      setWord(response.word);
+    });
+    // Aquí ponemos un array vacío porque solo queremos que se llame a la API la primera vez
+  }, []);
 
   const renderSolutionLetters = () => {
     const wordLetters = word.split('');
     console.log(wordLetters);
 
-     return wordLetters   // todas las letras buscadas por el user
+    return wordLetters // todas las letras buscadas por el user
       .map((letter, index) => {
-        const exist = userLetters.includes(letter.toLowerCase())
-        return <li key={index} className="letter">
-          {exist ? letter : ""}
-        </li>;
+        const exist = userLetters.includes(letter.toLowerCase());
+        return (
+          <li key={index} className="letter">
+            {exist ? letter : ''}
+          </li>
+        );
       });
   };
 
   const renderErrorLetters = () => {
-    const noExist = userLetters.filter((letter)=> word.includes(letter) === false)
-    
-    return noExist
-    .map((letter, index) => {
-      return <li key={index} className="letter">
-        {letter}
-      </li>;
-    });
-  }
+    const noExist = userLetters.filter(
+      (letter) => word.includes(letter) === false
+    );
 
-  const handleClick = () => {
+    if (noExist.length !== numberOfErrors) {
+      setNumberOfErrors(noExist.length);
+    }
+
+    return noExist.map((letter, index) => {
+      return (
+        <li key={index} className="letter">
+          {letter}
+        </li>
+      );
+    });
+  };
+
+  /*   const handleClick = () => {
     setNumberOfErrors(++numberOfErrors);
     console.log(numberOfErrors);
-  };
+  }; */
 
   const handleInput = (ev) => {
     console.log(ev.target.value);
@@ -45,7 +64,11 @@ function App() {
     if (letterValue === '' || regex.test(letterValue)) {
       setLastLetter(letterValue);
     }
-    if (letterValue !== '' && regex.test(letterValue)) {
+    if (
+      letterValue !== '' &&
+      regex.test(letterValue) &&
+      !userLetters.includes(letterValue)
+    ) {
       setuserLetters([letterValue, ...userLetters]);
     }
     /* OTRA OPCIÓN
@@ -89,7 +112,7 @@ function App() {
             <div className="error">
               <h2 className="title">Letras falladas:</h2>
               <ul className="letters">
-              {renderErrorLetters()}
+                {renderErrorLetters()}
                 {/* <li className="letter">f</li>
                 <li className="letter">q</li>
                 <li className="letter">h</li>
@@ -113,9 +136,9 @@ function App() {
               />
             </form>
           </section>
-          <button onClick={handleClick} className="btn-visible">
+          {/*         <button onClick={handleClick} className="btn-visible">
             Incrementar
-          </button>
+          </button> */}
           <section className={`dummy error-${numberOfErrors}`}>
             <span className="error-13 eye"></span>
             <span className="error-12 eye"></span>
